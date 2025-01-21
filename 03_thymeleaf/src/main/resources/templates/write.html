@@ -2,19 +2,18 @@
 <html lang="ko" xmlns:th="http://www.thymelraf.org">
 <head>
 <meta charset="UTF-8">
-<title>Edit</title>
+<title>Write</title>
 </head>
 <body>
 
-	<form th:action="@{/modify.do}" method="post" th:object="${board}">
+	<form th:action="@{/regist.do}" method="post">
 		<label for="title">제목</label>
-		<input type="text" id="title" name="title" th:field="*{title}">
+		<input type="text" id="title" name="title">
 		<br/>
     <label for="contents">내용</label>
-    <textarea id="contents" name="contents" th:text="*{contents}"></textarea>
+    <textarea id="contents" name="contents"></textarea>
     <br/>
-    <input type="hidden" name="boardId" th:field="*{boardId}">
-    <button type="submit">수정</button> 	
+    <button type="submit">등록</button> 	
 	</form>
 
 	<!--/* 자바스크립트 인라인  사용 */-->
@@ -29,6 +28,5 @@
   msgHeadler();
   
 	</script>
-	
 </body>
 </html>

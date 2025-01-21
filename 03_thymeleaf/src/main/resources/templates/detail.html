@@ -12,6 +12,7 @@
 	<pre th:text="|내용 : ${board.contents}|"></pre>
 	<div>
 		<button type="button" id=btn-edit>편집</button>
+		<button type="button" id=btn-delete>삭제</button>
 	</div>
 	
 	<!--/* 타임리프의 자바스크립트 인라인 문법 사용 */-->
@@ -19,13 +20,22 @@
 	<!--/* JavaScript Natural Template : /*[[${}]]*/ 디폴트값 */-->
 	<script th:inline="javascript">
 			
+    const boardId = /*[[${board.boardId}]]*/0;	// ${board.boardId} 값이 있으면 사용하고 없으면 0을 사용합니다.
+    
 		function btnEditClickHandler() {
 		  document.getElementById('btn-edit').addEventListener('click', (event) => {
-		    const boardId = /*[[${board.boardId}]]*/0;	// ${board.boardId} 값이 있으면 사용하고 없으면 0을 사용합니다.
 		    // console.log(typeof boardId, boardId);
 		    location.href = '/edit.do?boardId=' + boardId;
 		  })
 		}
+		
+		function btnDeleteClickHandler() {
+		  document.getElementById('btn-delete').addEventListener('click', (event) => {
+		    if(confirm('현재 게시글을 삭제할까요?')) {
+			    location.href = '/remove.do?boardId=' + boardId;		
+		    }
+		  })
+		}		
 		
 	  function msgHeadler() {
 	    const msg = /*[[${msg}]]*/ null;
@@ -34,6 +44,7 @@
 	  }
 	  	  		
 		btnEditClickHandler();
+		btnDeleteClickHandler();
 		msgHeadler();
 	
 	</script>

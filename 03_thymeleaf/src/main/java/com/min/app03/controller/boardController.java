@@ -25,13 +25,7 @@ public class boardController {
     return "/home";   // SpringResourceTemplateResolver (TemplateResolver)에 의해서 아래 코드가 추가됩니다. 
                       // prefix="/WEB-INF/templates"
                       // suffix=".html"
-  }
-  
-  @GetMapping("/write.do")
-  public String write() {
-    return "/write";
-  }
-    
+  }    
   
   @GetMapping("/list.do")
   public String list(HttpServletRequest request , Model model) {
@@ -48,11 +42,21 @@ public class boardController {
     model.addAttribute("board", boardService.getBoardListById(boardId));
     return "/detail";
   }
+
+  @GetMapping("/write.do")
+  public String write() {
+    return "/write";
+  }
   
   @PostMapping("/regist.do")
   public String regist(BoardDto boardDto, RedirectAttributes redirectAttributes) {
-    redirectAttributes.addFlashAttribute("msg", boardService.registBoard(boardDto));
-    return "redirect:/list.do";
+    try {
+      redirectAttributes.addFlashAttribute("msg", boardService.registBoard(boardDto));
+      return "redirect:/list.do";
+    } catch (Exception e) {
+      redirectAttributes.addFlashAttribute("msg", "게시글 등록 실패");
+      return "redirect:/write.do";
+    }
   }
 
   @GetMapping("/edit.do")
@@ -63,8 +67,13 @@ public class boardController {
   
   @PostMapping("/modify.do")
   public String modify(BoardDto boardDto, RedirectAttributes redirectAttributes) {
-    redirectAttributes.addFlashAttribute("msg", boardService.modifyBoard(boardDto));
-    return "redirect:/detail.do?boardId=" + boardDto.getBoardId();
+    try {
+      redirectAttributes.addFlashAttribute("msg", boardService.modifyBoard(boardDto));
+      return "redirect:/detail.do?boardId=" + boardDto.getBoardId();
+    } catch (Exception e) {
+      redirectAttributes.addFlashAttribute("msg", "게시글 수정 실패");
+      return "redirect:/edit.do?boardId=" + boardDto.getBoardId();
+    }
   }
   
   @GetMapping("/remove.do")

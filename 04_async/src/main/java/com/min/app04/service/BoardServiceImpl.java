@@ -1,4 +1,4 @@
-package com.min.app03.service;
+package com.min.app04.service;
 
 import java.util.List;
 import java.util.Map;
@@ -6,9 +6,9 @@ import java.util.Optional;
 
 import org.springframework.stereotype.Service;
 
-import com.min.app03.dto.BoardDto;
-import com.min.app03.mapper.IBoardMapper;
-import com.min.app03.util.PageUtil;
+import com.min.app04.dto.BoardDto;
+import com.min.app04.mapper.IBoardMapper;
+import com.min.app04.util.PageUtil;
 
 import jakarta.servlet.http.HttpServletRequest;
 import lombok.RequiredArgsConstructor;
