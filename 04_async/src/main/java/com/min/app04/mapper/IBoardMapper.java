@@ -15,4 +15,4 @@ public interface IBoardMapper {
   int insertBoard(BoardDto boardDto);
   int updateBoard(BoardDto boardDto);
   int deleteBoard(int boardId);
-} 
+}
