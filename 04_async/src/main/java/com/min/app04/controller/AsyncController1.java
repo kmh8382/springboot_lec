@@ -28,7 +28,7 @@ public class AsyncController1 {
   // jackson-databind 라이브러리가 포함되어 있습니다. (Spring MVC Project 에서는 직접 pom.xml에 추가해야 합니다.)
   // 이 라이브러리가 Java 데이터와 JSON 데이터의 상호 변환을 담당합니다.
   
-  @GetMapping(value={"/board/list", "/board/list.json"}
+  @GetMapping(value={"/board/list", "/board/list.json"} 
       //    , produces="application/json")                // 이 메소드의 응답 데이터는 JSON 타입입니다.
             , produces=MediaType.APPLICATION_JSON_VALUE)  // 위 주석 내용과 동일합니다.
   @ResponseBody  // 반환 값을 요청한 곳으로 응답합니다. 페이지의 이동은 없습니다.
