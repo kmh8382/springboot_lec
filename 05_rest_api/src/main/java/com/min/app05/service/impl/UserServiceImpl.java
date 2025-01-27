@@ -1,14 +1,15 @@
 package com.min.app05.service.impl;
 
-import java.sql.Timestamp;
 import java.util.List;
 import java.util.Map;
-import java.util.Optional;
 
 import org.springframework.stereotype.Service;
 
 import com.min.app05.mapper.IUserMapper;
+import com.min.app05.model.dto.InsertUserDto;
+import com.min.app05.model.dto.UpdateUserDto;
 import com.min.app05.model.dto.UserDto;
+import com.min.app05.model.exception.UserNotFoundException;
 import com.min.app05.service.IUserService;
 import com.min.app05.util.PageUtil;
 
@@ -21,55 +22,46 @@ public class UserServiceImpl implements IUserService {
 
   private final IUserMapper userMapper;
   private final PageUtil pageUtil;
-    
+  
   @Override
-  public UserDto registUser(UserDto userDto) throws Exception {  
-    userDto.setCreateDt(new Timestamp(System.currentTimeMillis()));
-    userMapper.insertUser(userDto);
-    return userDto;
+  public InsertUserDto registUser(InsertUserDto insertUserDto) {
+    userMapper.insertUser(insertUserDto);
+    return insertUserDto;
+  }
+  
+  @Override
+  public UpdateUserDto modifyUser(UpdateUserDto updateUserDto) throws Exception {
+    int updatedCount = userMapper.updateUser(updateUserDto);
+    if(updatedCount == 0)
+      throw new UserNotFoundException("회원 조회 실패로 인한 회원 정보 수정 오류");
+    return updateUserDto;
+  }
+  
+  @Override
+  public void removeUser(int userId) throws Exception {
+    int deletedCount = userMapper.deleteUser(userId);
+    if(deletedCount == 0)
+      throw new UserNotFoundException("회원 조회 실패로 인한 회원 정보 삭제 오류");
   }
 
   @Override
-  public UserDto modifyUser(UserDto userDto) throws Exception {
-    userMapper.updateUser(userDto);
-    return userDto;
-  }
-  
-  @Override
-  public int removeUser(int userId) throws Exception {
-    return userMapper.deleteUser(userId);
-  }
-  
-  @Override
-  public List<UserDto> getUsers(HttpServletRequest request) throws Exception {
-    
-    // 페이징 처리를 위한 파라미터 page, display
-    Optional<String> optPage = Optional.ofNullable(request.getParameter("page"));
-    int page = Integer.parseInt(optPage.orElse("1"));
-    Optional<String> optDisplay = Optional.ofNullable(request.getParameter("display"));
-    int display = Integer.parseInt(optDisplay.orElse("20"));
-    
-    // 페이징 처리를 위한 게시글 개수 count
+  public List<UserDto> getUsers(HttpServletRequest request) {
+    int page = Integer.parseInt(request.getParameter("page"));
+    int display = Integer.parseInt(request.getParameter("display"));
     int count = userMapper.selectUserCount();
-    
-    // 페이징 처리에 필요한 모든 변수 처리하기
     pageUtil.setPaging(page, display, count);
-    
-    // offset
-    int offset = pageUtil.getOffset();
-    
-    // 정렬을 위한 파라미터 sort
-    Optional<String> optSort = Optional.ofNullable(request.getParameter("sort"));
-    String sort = optSort.orElse("DESC");
-    
-    // 게시글 목록 가져오기 (전달 : offset, display, sort 를 저장한 Map)
-    return userMapper.selectUserList(Map.of("offset", offset
-                                          , "display", display
-                                          , "sort", sort));
+    String sort = request.getParameter("sort");
+    return userMapper.selectUserList(Map.of("sort", sort
+                                          , "offset", pageUtil.getOffset()
+                                          , "display", display));
   }
   
   @Override
   public UserDto getUserById(int userId) throws Exception {
-    return userMapper.selectUserById(userId);
+    UserDto foundUser = userMapper.selectUserById(userId);
+    if(foundUser == null)
+      throw new UserNotFoundException("회원 조회 실패");
+    return foundUser;
   }
+  
 }
