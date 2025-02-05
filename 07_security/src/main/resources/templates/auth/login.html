@@ -22,10 +22,18 @@
 	</form>
 
 	<script th:inline="javascript">
+	
 		const message = /*[[${message}]]*/ null;
 		if(message !== null)
-		  alert(message);		
-		// location.replace('경로') : 히스토리를 남기지 않고 이동하는 방식 (로그인 후 다시 로그인 페이지로 돌아오지 않도록 적절한 처리를 할 때 사용해 보세요.)		
+		  alert(message);
+		
+		const loginfailmessage = /*[[${param.loginfailmessage}]]*/ null;
+		if(loginfailmessage !== null) {
+		  alert(loginfailmessage);
+		  location.replace("/auth/login");
+			// location.replace('경로') : 히스토리를 남기지 않고 이동하는 방식 (로그인 후 다시 로그인 페이지로 돌아오지 않도록 적절한 처리를 할 때 사용해 보세요.)		
+		}
+		
 	</script>
 	
 	

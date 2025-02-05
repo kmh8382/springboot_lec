@@ -7,6 +7,7 @@ import org.springframework.jdbc.BadSqlGrammarException;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
+import com.min.app07.user.dto.LoginDto;
 import com.min.app07.user.dto.SignupDto;
 import com.min.app07.user.mapper.IUserMapper;
 
@@ -47,4 +48,9 @@ public class UserServiceImpl implements IUserService {
     
   }
 
+  @Override
+  public LoginDto findByUsername(String username) { 
+    return userMapper.selectUserByUsername(username);
+  }
+  
 }

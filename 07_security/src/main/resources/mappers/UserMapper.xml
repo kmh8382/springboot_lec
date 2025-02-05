@@ -17,4 +17,9 @@
 		)
 	</insert>
   
+  <select id="selectUserByUsername" resultType="LoginDto">
+  	SELECT user_no, user_id, user_password, user_name, user_role
+  		FROM tbl_user
+  	 WHERE user_id = #{username}
+  </select>
 </mapper>

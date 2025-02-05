@@ -38,8 +38,6 @@ public class LoginFailureHandler extends SimpleUrlAuthenticationFailureHandler {
     
     if(exception instanceof BadCredentialsException) {
       message = "아이디가 없거나 비밀번호가 일치하지 않습니다.";
-    } else if(exception instanceof UsernameNotFoundException) {
-      message = "존재하지 않는 사용자입니다.";
     } else if(exception instanceof InternalAuthenticationServiceException) {
       message = "서버의 사용자 인증 서비스에 오류가 발생했습니다.";
     } else if(exception instanceof AuthenticationCredentialsNotFoundException) {
@@ -48,7 +46,7 @@ public class LoginFailureHandler extends SimpleUrlAuthenticationFailureHandler {
       message = "알 수 없는 오류가 발생했습니다.";
     }
       
-    setDefaultFailureUrl("로그인실패시요청주소?message=" + URLEncoder.encode(message, "UTF-8"));
+    setDefaultFailureUrl("/auth/login?loginfailmessage=" + URLEncoder.encode(message, "UTF-8"));
     
     // 부모 메소드 호출은 다음 로직을 진행하라는 의미입니다.
     super.onAuthenticationFailure(request, response, exception);
