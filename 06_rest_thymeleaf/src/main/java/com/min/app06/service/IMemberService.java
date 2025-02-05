@@ -10,4 +10,5 @@ public interface IMemberService {
   Map<String, Object> registMember(Map<String, Object> params);
   Map<String, Object> modifyMember(Map<String, Object> params);
   int removeMember(int memId);
+  int removeSelectMember(String memIds);
 }

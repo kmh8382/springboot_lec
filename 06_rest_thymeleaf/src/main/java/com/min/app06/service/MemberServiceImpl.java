@@ -38,7 +38,7 @@ public class MemberServiceImpl implements IMemberService {
     return Map.of("member", memberMapper.selectMemberById(memId)
                 , "address", addrDto == null ? new AddrDto() : addrDto);
   }
-
+  
   @Override
   public Map<String, Object> registMember(Map<String, Object> params) {
     MemberDto memberDto = MemberDto.builder()
@@ -70,13 +70,13 @@ public class MemberServiceImpl implements IMemberService {
                           .build();
     memberMapper.updateMember(memberDto);
     AddrDto addrDto = AddrDto.builder()
-                        .postcode(params.get("postcode").toString())
-                        .roadAddress(params.get("roadAddress").toString())
-                        .jibunAddress(params.get("jibunAddress").toString())
-                        .detailAddress(params.get("detailAddress").toString())
-                        .extraAddress(params.get("extraAddress").toString())
-                        .addrName(params.get("addrName").toString())
-                      .build();
+        .postcode(params.get("postcode").toString())
+        .roadAddress(params.get("roadAddress").toString())
+        .jibunAddress(params.get("jibunAddress").toString())
+        .detailAddress(params.get("detailAddress").toString())
+        .extraAddress(params.get("extraAddress").toString())
+        .addrName(params.get("addrName").toString())
+      .build();
     if((int)params.get("addrId") == 0) {
       addrDto.setMemId((int)params.get("memId"));
       memberMapper.insertAddress(addrDto);
@@ -84,7 +84,6 @@ public class MemberServiceImpl implements IMemberService {
       addrDto.setAddrId((int)params.get("addrId"));
       memberMapper.updateAddress(addrDto);
     }
-    memberMapper.updateAddress(addrDto);
     return Map.of("member", memberDto
                 , "address", addrDto);
   }
@@ -93,4 +92,10 @@ public class MemberServiceImpl implements IMemberService {
   public int removeMember(int memId) {
     return memberMapper.deleteMember(memId);
   }
+  
+  @Override
+  public int removeSelectMember(String memIds) {
+    return memberMapper.deleteSelectMember(memIds);
+  }
+
 }

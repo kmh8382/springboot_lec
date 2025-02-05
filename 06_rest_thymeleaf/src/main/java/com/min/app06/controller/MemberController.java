@@ -2,7 +2,6 @@ package com.min.app06.controller;
 
 import java.util.Map;
 
-import org.apache.ibatis.annotations.Delete;
 import org.springframework.http.MediaType;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -62,21 +61,32 @@ public class MemberController {
     params.put("memId", memId);
     Map<String, Object> map = memberService.modifyMember(params);
     return ResponseMessage.builder()
-        .status(200)
-        .message("회원 정보 수정 성공")
-        .results(Map.of("member", map.get("member"), "address", map.get("address")))
-      .build();
+              .status(200)
+              .message("회원 정보 수정 성공")
+              .results(Map.of("member", map.get("member"), "address", map.get("address")))
+            .build();
   }
   
-  @DeleteMapping(value = "/members/{memId}", produces = MediaType.APPLICATION_JSON_VALUE)
-  public ResponseMessage removeMember (@PathVariable(name = "memId") int memId) {
+  // 단일 삭제 주소는 /member 입니다.
+  @DeleteMapping(value = "/member/{memId}", produces = MediaType.APPLICATION_JSON_VALUE)
+  public ResponseMessage removeMember(@PathVariable(name = "memId") int memId) {
     memberService.removeMember(memId);
     return ResponseMessage.builder()
-        .status(200)
-        .message("회원 삭제 성공")
-        .results(null)
-      .build();
-
+              .status(200)
+              .message("회원 삭제 성공")
+              .results(null)
+            .build();
+  }
+  
+  // 다중 삭제 주소는 /members 입니다.
+  @DeleteMapping(value = "/members/{memIds}", produces = MediaType.APPLICATION_JSON_VALUE)
+  public ResponseMessage removeSelectMember(@PathVariable(name = "memIds") String memIds) {
+    memberService.removeSelectMember(memIds);
+    return ResponseMessage.builder()
+              .status(200)
+              .message("선택한 회원 삭제 성공")
+              .results(null)
+            .build();
   }
   
 }

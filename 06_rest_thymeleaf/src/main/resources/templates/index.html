@@ -158,6 +158,7 @@
     const btnRegist = document.getElementById('btn-regist');
     const btnModify = document.getElementById('btn-modify');
     const btnRemove = document.getElementById('btn-remove');
+    const btnSelectRemove = document.getElementById('btn-select-remove');
     
     function init() {
       inpMemId.value = '';
@@ -165,8 +166,7 @@
       inpMemEmail.readOnly = false;
       inpMemName.value = '';
       document.querySelector('input[name=gender][value=N]').checked = true;
-      
-      inpAddrId.value = '';
+      inpAddrId.value = '0';
       inpPostcode.value = '';
       inpRoadAddress.value = '';
       inpJibunAddress.value = '';
@@ -306,12 +306,10 @@
     
     function removeMember() {
       btnRemove.addEventListener('click', event => {
-        if(!confirm('삭제?')) {
+        if(!confirm('회원 정보를 삭제할까요?')) {
           return;
         }
-        fetch(`/members/${inpMemId.value}`, {
-          method: 'DELETE'
-        })
+        fetch(`/member/${inpMemId.value}`, { method: 'DELETE' })
           .then(response => response.json())
           .then(jsonData => {
             if(jsonData.status === 200) {
@@ -320,7 +318,39 @@
               display = 20;
               queryString = `&display=${display}`;
               init();
-              getMembers();              
+              getMembers();
+            }
+          })
+      })
+    }
+    
+    function removeSelectMember() {
+      btnSelectRemove.addEventListener('click', event => {
+        // 체크된 체크박스의 value를 배열에 저장하기
+        let arr = [];
+        document.querySelectorAll('.chk-member').forEach(chk => {
+          if(chk.checked) {
+            arr.push(chk.value);
+          }
+        })
+        // 체크된 체크박스가 없으면 함수 종료
+        if(arr.length === 0) {
+          alert('선택된 회원이 없습니다.');
+          return;
+        }
+        if(!confirm('선택한 회원 정보를 삭제할까요?')) {
+          return;
+        }
+        fetch(`/members/${arr.join(',')}`, { method: 'DELETE' })
+          .then(response => response.json())
+          .then(jsonData => {
+            if(jsonData.status === 200) {
+              alert(jsonData.message);
+              page = 1;
+              display = 20;
+              queryString = `&display=${display}`;
+              init();
+              getMembers();
             }
           })
       })
@@ -331,6 +361,7 @@
     registMember();
     modifyMember();
     removeMember();
+    removeSelectMember();
     
   </script>
 

@@ -20,4 +20,5 @@ public interface IMemberMapper {
   int updateMember(MemberDto memberDto);
   int updateAddress(AddrDto addrDto);
   int deleteMember(int memId);
+  int deleteSelectMember(String memIds);
 }

@@ -82,5 +82,11 @@
       FROM tbl_member
      WHERE mem_id = #{memId}
   </delete>
+
+  <delete id="deleteSelectMember">
+    DELETE
+      FROM tbl_member
+     WHERE mem_id IN (${memIds})
+  </delete>
   
 </mapper>
