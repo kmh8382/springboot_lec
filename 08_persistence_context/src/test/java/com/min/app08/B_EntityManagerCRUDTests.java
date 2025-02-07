@@ -24,7 +24,7 @@ class B_EntityManagerCRUDTests {
   // 엔티티 매니저
   private EntityManager entityManager;
   
-  // 전체 테스트를 시작하기 전에 엔ㅌ니티 메니저 팩토리를 생성합니다. (테스트 클래스가 동작하기 이전)
+  // 전체 테스트를 시작하기 전에 엔티티 메니저 팩토리를 생성합니다. (테스트 클래스가 동작하기 이전)
   @BeforeAll
   static void setEntityManagerFactory() throws Exception {
     entityManagerFactory = Persistence.createEntityManagerFactory("jpa_test");
@@ -76,7 +76,7 @@ class B_EntityManagerCRUDTests {
       entityTransaction.rollback();
     }
    
-    // 테스트 (엔티티 매니저가 menu 엔티티를 자기소 있는지 확인)
+    // 테스트 (엔티티 매니저가 menu 엔티티를 가지고 있는지 확인)
     Assertions.assertThat(entityManager.contains(menu)).isTrue();
     
   }

@@ -40,7 +40,7 @@ public class Menu {
    * 칼럼 이름을 name 속성으로 지정할 수 있습니다.
    */
   @Id
-  // @GeneratedValue(strategy = GenerationType.IDENTITY)
+  @GeneratedValue(strategy = GenerationType.IDENTITY)   // AUTO_INCREMENT 기능
   @Column(name = "menu_code")
   private int menuCode;
   
