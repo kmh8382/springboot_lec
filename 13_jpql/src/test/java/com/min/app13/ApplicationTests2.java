@@ -118,14 +118,14 @@ class ApplicationTests2 {
   @Test
   void new_DTO_프로젝션_test() {
     
-    // SEMECT 절에서 new 를 이용해 객체를 생성하고 해당 객체 타입으로 조회합니다.
+    // SELECT 절에서 new 를 이용해 객체를 생성하고 해당 객체 타입으로 조회합니다.
     
-    String jpql = "SELECT new com.min.app13.entity2.CategoryInfo(c.categoryCode c.categoryName) FROM category2 c";
+    String jpql = "SELECT new com.min.app13.entity2.CategoryInfo(c.categoryCode, c.categoryName) FROM category2 c";
     
     List<CategoryInfo> categoryInfoList = entityManager.createQuery(jpql, CategoryInfo.class)
                                                        .getResultList();
     
-    Assertions.assertThat(categoryInfoList).isNotEmpty();
+    Assertions.assertThat(categoryInfoList).isNotNull();
     categoryInfoList.forEach(System.out::println);
     
     // new 를 이용해 생성한 객체는 영속 컨텍스트에 저장되지 않기 때문에 테스트는 실패합니다.
