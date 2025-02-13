@@ -5,12 +5,15 @@ import java.util.List;
 import org.modelmapper.ModelMapper;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
-import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import com.min.app15.model.dto.CategoryDto;
 import com.min.app15.model.dto.MenuDto;
+import com.min.app15.model.entity.Category;
 import com.min.app15.model.entity.Menu;
+import com.min.app15.model.exception.MenuNotFoundException;
+import com.min.app15.repository.CategoryRepository;
 import com.min.app15.repository.MenuRepository;
 
 import lombok.RequiredArgsConstructor;
@@ -21,7 +24,20 @@ import lombok.RequiredArgsConstructor;
 public class MenuServiceImpl implements MenuService {
 
   private final MenuRepository menuRepository;
+  private final CategoryRepository categoryRepository; 
   private final ModelMapper modelMapper;
+  
+  @Transactional(readOnly = true)
+  @Override
+  public List<CategoryDto> findByCategoryList() {
+    
+    Integer categoryCode = 3;
+    List<Category> categories = categoryRepository.findByCategoryCodeGreaterThan(categoryCode);
+    
+    return categories.stream()
+                     .map(category -> modelMapper.map(category, CategoryDto.class))
+                     .toList();
+  }
   
   @Override
   public MenuDto registMenu(MenuDto menuDto) {
@@ -36,10 +52,16 @@ public class MenuServiceImpl implements MenuService {
   }
   
   @Override
-  public MenuDto modifyMenu(MenuDto menuDto) {
+  public MenuDto modifyMenu(MenuDto menuDto) throws MenuNotFoundException {
     
     // findById() 메소드의 호출 결과 엔티티는 영속 컨텍스트에 저장됩니다.
     Menu foundMenu = menuRepository.findById(menuDto.getMenuCode()).orElse(null);
+    
+    // findById() 메소드가 던지는 IllegalArgumentException 처리를 하려면 아래와 같이 합니다.
+    //Menu foundMenu = menuRepository.findById(menuDto.getMenuCode()).orElseThrow(() -> new IllegalArgumentException());
+    
+    if(foundMenu == null)
+      throw new MenuNotFoundException("해당 메뉴가 없습니다.");
     
     // 영속 컨텍스드에 저장된 엔티티를 변경하면 해당 변경 사항이 데이터베이스에 반영됩니다.
     foundMenu.setMenuName(menuDto.getMenuName());
@@ -51,11 +73,14 @@ public class MenuServiceImpl implements MenuService {
   }
   
   @Override
-  public void deleteMenu(Integer menuCode) {
+  public void deleteMenu(Integer menuCode) throws MenuNotFoundException {
 
     // menuRepository.deleteById(menuCode);   // 없는 메뉴는 어떻게 할 것인가? 처리할 수 없기 때문에 find 기반의 delete 로 바꿉니다.
     
     Menu foundMenu = menuRepository.findById(menuCode).orElse(null);
+    
+    if(foundMenu == null)
+      throw new MenuNotFoundException("해당 메뉴가 없습니다.");
     
     menuRepository.delete(foundMenu);
     
